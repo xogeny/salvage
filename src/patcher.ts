@@ -25,15 +25,25 @@ export function patch<T extends {}>(a: T, b: T): T {
         if (a.hasOwnProperty(prop)) {
             let equal = false; // We assume they aren't equal unless proven otherwise
             let aval = a[prop];
-            let ato = typeof bval;
+            let ato = typeof aval;
 
             if (ato === bto) {
                 // If the same type, make an equality type according to that type.
                 switch (bto) {
                     case 'string':
+                    case 'number':
+                    case 'boolean':
                         equal = (aval === bval);
                         //console.log(a, " === ", b, " is ", equal);
                         break;
+                    case 'object':
+                        if (Array.isArray(bval)) {
+                            let tmp = keep(aval, bval);
+                            changed = tmp === bval;
+                            bval = tmp;
+                        } else {
+                            console.log("Unhandled object type for ", bval);
+                        }
                     default:
                         console.log("No equality check for ", bto);
                         equal = false;
@@ -57,4 +67,39 @@ export function patch<T extends {}>(a: T, b: T): T {
     if (changed) return ret;
     // otherwise, just return a
     return a;
+}
+
+function keep(aval: any, bval: any): any {
+    let bto = typeof aval;
+    let ato = typeof bval;
+
+    if (ato === bto) {
+        // If the same type, make an equality type according to that type.
+        switch (bto) {
+            case 'string':
+            case 'number':
+            case 'boolean':
+                if (aval === bval) {
+                    return aval;
+                }
+                return bval;
+            case 'object':
+                if (Array.isArray(bval)) {
+                    return keepArray(aval as Array<any>, bval as Array<any>);
+                } else {
+                    console.log("Unhandled object type for ", bval);
+                }
+            default:
+                throw new Error("No equality check for "+bto);
+        }
+    }
+    return bval;
+}
+
+function keepArray(a: any[], b: any[]): any[] {
+    let ret: any[] = [];
+    for (let i = 0; i < a.length; i++) {
+
+    }
+    throw new Error("Unimplemented");
 }
