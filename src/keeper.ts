@@ -1,3 +1,5 @@
+import { Logger } from './logger';
+
 /**
  * This function takes two arguments where the first argument 
  * represents some "current" value for a variable and the 
@@ -18,7 +20,8 @@
  * changed.  By running such values through the 'keep' function,
  * we can determine which values truly need updating.
  */
-export function keep(aval: any, bval: any): any {
+export function keep(aval: any, bval: any, log: Logger): any {
+    if (log) log.enter(aval, bval);
     // Get the result of "typeof" for both values.
     let bto = typeof aval;
     let ato = typeof bval;
@@ -35,14 +38,17 @@ export function keep(aval: any, bval: any): any {
             case 'number':
             case 'boolean':
                 if (aval === bval) {
+                    if (log) log.leave(aval);
                     return aval;
                 }
+                if (log) log.leave(bval);
                 return bval;
             // Object is a really tricky case because lots of stuff comes back
             // as "object" in Javascript (including a null value).
             case 'object':
                 // Handle null value special case...
                 if (aval===null || bval===null) {
+                    if (log) log.leave(bval);
                     return bval;
                 }
                 
@@ -54,12 +60,16 @@ export function keep(aval: any, bval: any): any {
                     case "[object Object]":
                         // It's an object, so use this special function to decide what
                         // properties to keep.
-                        return keepObject(aval, bval);
+                        let ret = keepObject(aval, bval, log);
+                        if (log) log.leave(ret);
+                        return ret;
                     default:
                         if (Array.isArray(bval)) {
                             // It's an array, so use this special function to decide
                             // what elements to keep.
-                            return keepArray(aval, bval);
+                            let ret = keepArray(aval, bval);
+                            if (log) log.leave(ret);
+                            return ret;
                         } else {
                             console.log("bval = ", bval);
                             console.log("ctype = ", ctype);
@@ -71,10 +81,12 @@ export function keep(aval: any, bval: any): any {
                 throw new Error("No equality check for " + bto);
         }
     }
+    if (log) log.leave(bval);
     return bval;
 }
 
-function keepObject(a: {}, b: {}): {} {
+function keepObject(a: {}, b: {}, log: Logger): {} {
+    if (log) log.enter(a, b);
     let ret: {} = {}
     let changed = false;
 
@@ -93,7 +105,7 @@ function keepObject(a: {}, b: {}): {} {
             delete ret[aprop];
             changed = true;
         } else {
-            let tmp = keep(aval, bval);
+            let tmp = keep(aval, bval, log);
             if (tmp !== aval) {
                 ret[aprop] = tmp;
                 changed = true;
@@ -110,8 +122,10 @@ function keepObject(a: {}, b: {}): {} {
     }
 
     if (changed) {
+        log.leave(ret);
         return ret;
     }
+    log.leave(a);
     return a;
 }
 

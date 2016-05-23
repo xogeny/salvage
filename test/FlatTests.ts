@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import mocha = require('mocha');
 
+import { ConsoleLogger } from '../src/logger';
+
 import { shouldEqual, shouldBeSame } from './utils';
 
 describe("Flat tests", () => {
