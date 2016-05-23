@@ -109,7 +109,6 @@ function keepObject(a: {}, b: {}): {} {
         }
     }
 
-    console.log("changed = ", changed);
     if (changed) {
         return ret;
     }

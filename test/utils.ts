@@ -25,7 +25,7 @@ export function shouldEqual(a: {}, b: {}, c: {}, fromA: string[], fromB: string[
     expect(ta).to.deep.equal(a, "keep MUTATED first input argument!!!");
     expect(tb).to.deep.equal(b, "keep MUTATED second input argument!!!");
 
-    console.log("keep ", a, ", ", b, " = ", c, " == ", r);
+    //console.log("keep ", a, ", ", b, " = ", c, " == ", r);
     expect(c).to.deep.equal(r);
     for(let ap in a) {
         let eq = fromA.indexOf(ap)>=0;
