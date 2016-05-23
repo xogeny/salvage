@@ -1,10 +1,9 @@
 import { expect } from 'chai';
 import mocha = require('mocha');
 
-import { patch } from '../src';
-import { shouldBeNew, shouldBeSame } from './utils';
+import { shouldEqual, shouldBeSame } from './utils';
 
-describe("Basic tests", () => {
+describe("Flat tests", () => {
     it("should not change empty objects", () => {
         shouldBeSame({}, {});
     });
@@ -24,33 +23,48 @@ describe("Basic tests", () => {
         })
     })
     it("should change if property disappears", () => {
-        shouldBeNew({
+        shouldEqual({
             x: 5,
-        }, {})
+        }, {}, {}, [], [])
     })
-    it("should not change numbers", () => {
+    it("should not change equal numbers", () => {
         shouldBeSame({
             x: 5,
         }, {
             x: 5,
         })
     })
+    it("should change unequal numbers", () => {
+        shouldEqual({
+            x: 5,
+        }, {
+            x: 6,
+        }, {
+            x: 6,
+        }, [], ["x"]);
+    })
     it("should change for new properties", () => {
-        shouldBeNew({
+        shouldEqual({
             x: 5,
         }, {
             x: 5,
             y: 6,
-        })
+        }, {
+            x: 5,
+            y: 6,
+        }, ["x"], ["y"])
     })
-    it("should handle complex chnages", () => {
-        shouldBeNew({
+    it("should handle complex changes", () => {
+        shouldEqual({
             x: 5,
             y: 6,
         }, {
             y: 6,
             z: 7,
-        })
+        }, {
+            y: 6,
+            z: 7,
+        }, ["y"], ["z"]);
     })
     it("should handle booleans", () => {
         shouldBeSame({
@@ -63,10 +77,12 @@ describe("Basic tests", () => {
         }, {
             x: false,
         })
-        shouldBeNew({
+        shouldEqual({
             x: true,
         }, {
             x: false,
-        })
+        }, {
+            x: false,
+        }, [], ["x"]);
     })
 })
