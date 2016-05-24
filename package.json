@@ -22,7 +22,8 @@
   },
   "scripts": {
     "cover": "tsc && node ./node_modules/istanbul/lib/cli.js cover -x '**/logger.*' _mocha lib/test/**/*.js && ./node_modules/.bin/remap-istanbul -i ./coverage/coverage.raw.json -o ./coverage/html-report -t html",
-    "test": "mocha"
+    "test": "mocha",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",

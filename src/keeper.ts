@@ -38,6 +38,7 @@ export function keep(aval: any, bval: any, opts?: KeeperOptions) {
         // If the same type, we need to decide if these aren't just the same
         // type, but whether they are the same value.  But that kind of equality
         // check depends on the underlying type...
+
         switch (bto) {
             // For primitive types, we can just use good old "===" on the values
             // (we used it on the *types* above, but not the values).
@@ -72,6 +73,7 @@ export function keep(aval: any, bval: any, opts?: KeeperOptions) {
                         if (log) log.leave(ret);
                         return ret;
                     default:
+                        /* istanbul ignore else */
                         if (Array.isArray(bval)) {
                             // It's an array, so use this special function to decide
                             // what elements to keep.
@@ -79,11 +81,12 @@ export function keep(aval: any, bval: any, opts?: KeeperOptions) {
                             if (log) log.leave(ret);
                             return ret;
                         } else {
-                            console.log("bval = ", bval);
-                            console.log("ctype = ", ctype);
+                            // This is here to advertise any cases that arent covered here.
+                            /* istanbul ignore next */
                             throw new Error("No object equality check for " + bto + " (" + ctype + ")");
                         }
                 }
+            /* istanbul ignore next */
             default:
                 console.log("bval = ", bval);
                 throw new Error("No equality check for " + bto);
