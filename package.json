@@ -21,7 +21,7 @@
     "typescript": "^1.8.10"
   },
   "scripts": {
-    "cover": "tsc && node ./node_modules/istanbul/lib/cli.js cover _mocha lib/test/**/*.js && ./node_modules/.bin/remap-istanbul -i ./coverage/coverage.raw.json -o ./coverage/html-report -t html",
+    "cover": "tsc && node ./node_modules/istanbul/lib/cli.js cover -x '**/logger.*' _mocha lib/test/**/*.js && ./node_modules/.bin/remap-istanbul -i ./coverage/coverage.raw.json -o ./coverage/html-report -t html",
     "test": "mocha"
   },
   "repository": {
