@@ -31,6 +31,10 @@ export function shouldBeSecond(a: any, b: any) {
     expect(c).to.equal(b);    
 }
 
+export function shouldContain(a: Array<any>, b: Array<any>, c: Array<any>, fromA: number[], fromB: number[]) {
+    
+}
+
 export function shouldEqual(a: {}, b: {}, c: {}, fromA: string[], fromB: string[]) {
     let opts: KeeperOptions = {
         log: new ConsoleLogger(silent),
