@@ -4,6 +4,9 @@ import _ = require('lodash');
 
 type Where = "FromA" | "FromB" | "Deleted" | "New";
 
+
+// TODO: This can be simplified, I think.  Just assume b unless we find a value in a
+// that is the same.
 export function keepObject(a: {}, b: {}, opts: KeeperOptions): {} {
     let log = (opts ? opts.log : undefined);
 

@@ -31,8 +31,9 @@ export function shouldBeSecond(a: any, b: any) {
     expect(c).to.equal(b);    
 }
 
-export function shouldContain(a: Array<any>, b: Array<any>, c: Array<any>, fromA: number[], fromB: number[]) {
-    
+export function shouldContain(a: Array<any>, b: Array<any>, c: Array<any>,
+    fromA: Array<number | number[]>, fromB: Array<number | number[]>) {
+    expect(true).to.equal(false);
 }
 
 export function shouldEqual(a: {}, b: {}, c: {}, fromA: string[], fromB: string[]) {

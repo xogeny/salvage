@@ -14,22 +14,27 @@ describe("Basic tests", () => {
         shouldContain([1, 2, 3], [1, 2], [1, 2], [0, 1], []);
     })
     it("should handle prepended items", () => {
-        shouldContain([2, 3], [1, 2, 3], [1, 2, 3], [1, 2], [0]);
+        shouldContain([2, 3], [1, 2, 3], [1, 2, 3], [[1, 0], [2, 1]], [0]);
     })
     it("should handle appended items", () => {
         shouldContain([1, 2], [1, 2, 3], [1, 2, 3], [0, 1], [2]);
     })
     it("should handle inserted items", () => {
         // This is tricky...
-        shouldContain([1, 3], [1, 2, 3], [1, 2, 3], [0, 2], [1]);  
+        shouldContain([1, 3], [1, 2, 3], [1, 2, 3], [0, [2, 1]], [1]);
     })
-    it("should handle dropped items", () => {
-        shouldEqual({
-            a: [1, 2, 3],
-        }, {
-            a: [1, 2],
-        }, {
-            a: [1, 2]
-        }, [""], ["a"]);
+    it("should handle inserted items", () => {
+        // This is tricky...
+        shouldContain([{ a: 1 }, { a: 3 }],
+            [{ a: 1 }, { a: 2 }, { a: 3 }],
+            [{ a: 1 }, { a: 2 }, { a: 3 }],
+            [0, [2, 1]], [1]);
+    })
+    it("should handle out of order items", () => {
+        // This is tricky...
+        shouldContain([{ a: 1 }, { a: 2 }, { a: 3 }],
+            [{ a: 2 }, { a: 3 }, { a: 1 }],
+            [{ a: 2 }, { a: 3 }, { a: 1 }],
+            [[0, 1], [2, 0]], [[1, 2]]);
     })
 })
