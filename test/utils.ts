@@ -28,12 +28,29 @@ export function shouldBeSecond(a: any, b: any) {
     }
     let c = keep(a, b, opts);
     opts.log.done();
-    expect(c).to.equal(b);    
+    expect(c).to.equal(b);
 }
 
-export function shouldContain(a: Array<any>, b: Array<any>, c: Array<any>,
-    fromA: Array<number | number[]>, fromB: Array<number | number[]>) {
-    expect(true).to.equal(false);
+export function shouldContain(a: Array<any>, b: Array<any>, fromA: Array<number | number[]>, fromB: Array<number>) {
+    let opts: KeeperOptions = {
+        log: new ConsoleLogger(silent),
+    }
+    let r = keep(a, b, opts);
+    expect(r).to.deep.equal(b);
+
+    for (let i = 0; i < fromA.length; i++) {
+        let from = fromA[i];
+        if (_.isArray(from)) {
+            expect(r[from[0]]).to.equal(a[from[1]]);
+        } else {
+            expect(r[from]).to.equal(a[from]);
+        }
+    }
+
+    for (let i = 0; i < fromB.length; i++) {
+        let from = fromB[i];
+        expect(r[from]).to.equal(b[from]);
+    }
 }
 
 export function shouldEqual(a: {}, b: {}, c: {}, fromA: string[], fromB: string[]) {
