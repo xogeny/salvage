@@ -1,5 +1,6 @@
 import { Logger } from './logger';
 
 export interface SalvageOptions {
-    log: Logger;
+    log?: Logger;
+    sameIndex?: boolean;
 }

@@ -32,36 +32,40 @@ export function salvageObject(a: {}, b: {}, opts: SalvageOptions): {} {
             let aval = a[key];
             let cval = salvage(aval, bval, opts); // which to use?
             ret[key] = cval;
-            
+
             if (cval === aval) {
-                log.fact("Value for property " + key + " comes from 'a'");
+                if (log) log.fact("Value for property " + key + " comes from 'a'");
                 pureB = false;
             } else if (cval === bval) {
-                log.fact("Value for property " + key + " comes from 'b'");
+                if (log) log.fact("Value for property " + key + " comes from 'b'");
                 pureA = false;
             } else {
-                log.fact("Value for property " + key + " is a mix of 'b' and 'b'");
+                if (log) log.fact("Value for property " + key + " is a mix of 'b' and 'b'");
                 pureB = false;
                 pureA = false;
             }
         } else {
-            log.fact("No value for property " + key + " in 'a'");
+            if (log) log.fact("No value for property " + key + " in 'a'");
             ret[key] = bval;
             pureA = false;
         }
     }
-    
+
     let same = sameKeys(a, b);
 
     if (pureA && same) {
-        log.fact("Could keep 'a' value");
-        log.leave(a);
+        if (log) {
+            log.fact("Could keep 'a' value");
+            log.leave(a);
+        }
         return a;
     }
-    
+
     if (pureB && same) {
-        log.fact("Could keep 'b' value");
-        log.leave(b);
+        if (log) {
+            log.fact("Could keep 'b' value");
+            log.leave(b);
+        }
         return b;
     }
 
@@ -70,7 +74,9 @@ export function salvageObject(a: {}, b: {}, opts: SalvageOptions): {} {
     // the same properties and we chose 'a' value in every case?  Then we
     // can simply return a.
 
-    log.fact("Created a new object");
-    log.leave(ret);
+    if (log) {
+        log.fact("Created a new object");
+        log.leave(ret);
+    }
     return ret;
 }

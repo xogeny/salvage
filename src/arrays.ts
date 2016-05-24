@@ -19,11 +19,19 @@ export function salvageArray(a: any[], b: any[], opts: SalvageOptions): any[] {
     for (let i = 0; i < b.length; i++) {
         let bval = b[i];
         ret[i] = bval;
-        for (let j = 0; j < a.length; j++) {
-            let aval = a[j];
+        if (opts && opts.sameIndex) {
+            let aval = a[i];
             let c = salvage(aval, bval, opts);
             if (c === aval) {
                 ret[i] = aval;
+            }
+        } else {
+            for (let j = 0; j < a.length; j++) {
+                let aval = a[j];
+                let c = salvage(aval, bval, opts);
+                if (c === aval) {
+                    ret[i] = aval;
+                }
             }
         }
     }
