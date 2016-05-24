@@ -1,5 +1,5 @@
-import { KeeperOptions } from './options';
-import { keep } from './keeper';
+import { SalvageOptions } from './options';
+import { salvage } from './salvage';
 
 function identical(a: any[], b: any[]): boolean {
     if (a.length !== b.length) return false;
@@ -11,7 +11,7 @@ function identical(a: any[], b: any[]): boolean {
     return true;
 }
 
-export function keepArray(a: any[], b: any[], opts: KeeperOptions): any[] {
+export function salvageArray(a: any[], b: any[], opts: SalvageOptions): any[] {
     let log = (opts ? opts.log : undefined);
 
     if (log) log.enter(a, b);
@@ -21,7 +21,7 @@ export function keepArray(a: any[], b: any[], opts: KeeperOptions): any[] {
         ret[i] = bval;
         for (let j = 0; j < a.length; j++) {
             let aval = a[j];
-            let c = keep(aval, bval, opts);
+            let c = salvage(aval, bval, opts);
             if (c === aval) {
                 ret[i] = aval;
             }

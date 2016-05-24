@@ -1,5 +1,5 @@
 import { Logger } from './logger';
 
-export interface KeeperOptions {
+export interface SalvageOptions {
     log: Logger;
 }

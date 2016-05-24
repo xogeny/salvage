@@ -1,5 +1,5 @@
-import { KeeperOptions } from './options';
-import { keep } from './keeper';
+import { SalvageOptions } from './options';
+import { salvage } from './salvage';
 
 // A simple function that checks whether two objects have
 // *exactly* the same keys.
@@ -13,7 +13,7 @@ function sameKeys(a: {}, b: {}): boolean {
     return true;
 }
 
-export function keepObject(a: {}, b: {}, opts: KeeperOptions): {} {
+export function salvageObject(a: {}, b: {}, opts: SalvageOptions): {} {
     let log = (opts ? opts.log : undefined);
 
     if (log) log.enter(a, b);
@@ -30,7 +30,7 @@ export function keepObject(a: {}, b: {}, opts: KeeperOptions): {} {
         // value (from a or from b) to keep
         if (a.hasOwnProperty(key)) {
             let aval = a[key];
-            let cval = keep(aval, bval, opts); // which to use?
+            let cval = salvage(aval, bval, opts); // which to use?
             ret[key] = cval;
             
             if (cval === aval) {

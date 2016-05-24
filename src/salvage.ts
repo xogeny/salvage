@@ -1,6 +1,6 @@
-import { KeeperOptions } from './options';
-import { keepObject } from './objects';
-import { keepArray } from './arrays';
+import { SalvageOptions } from './options';
+import { salvageObject } from './objects';
+import { salvageArray } from './arrays';
 import { Logger } from './logger';
 
 /**
@@ -23,7 +23,7 @@ import { Logger } from './logger';
  * changed.  By running such values through the 'keep' function,
  * we can determine which values truly need updating.
  */
-export function keep(aval: any, bval: any, opts?: KeeperOptions) {
+export function salvage(aval: any, bval: any, opts?: SalvageOptions) {
     //export function keep(aval: any, bval: any, opts?: KeeperOptions): any {
     let log = (opts ? opts.log : undefined);
 
@@ -69,7 +69,7 @@ export function keep(aval: any, bval: any, opts?: KeeperOptions) {
                         // It's an object, so use this special function to decide what
                         // properties to keep.
                         //console.log("K log = ", log);
-                        let ret = keepObject(aval, bval, opts);
+                        let ret = salvageObject(aval, bval, opts);
                         if (log) log.leave(ret);
                         return ret;
                     default:
@@ -77,7 +77,7 @@ export function keep(aval: any, bval: any, opts?: KeeperOptions) {
                         if (Array.isArray(bval)) {
                             // It's an array, so use this special function to decide
                             // what elements to keep.
-                            let ret = keepArray(aval, bval, opts);
+                            let ret = salvageArray(aval, bval, opts);
                             if (log) log.leave(ret);
                             return ret;
                         } else {

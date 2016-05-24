@@ -1,41 +1,41 @@
 import { expect } from 'chai';
-import { keep, ConsoleLogger, KeeperOptions } from '../src';
+import { salvage, ConsoleLogger, SalvageOptions } from '../src';
 import _ = require('lodash');
 
 const silent = true;
 
 export function shouldChange(a: any, b: any) {
-    let opts: KeeperOptions = {
+    let opts: SalvageOptions = {
         log: new ConsoleLogger(silent),
     }
-    let c = keep(a, b, opts);
+    let c = salvage(a, b, opts);
     opts.log.done();
     expect(c).to.not.equal(a);
 }
 
 export function shouldBeFirst(a: any, b: any) {
-    let opts: KeeperOptions = {
+    let opts: SalvageOptions = {
         log: new ConsoleLogger(silent),
     }
-    let c = keep(a, b, opts);
+    let c = salvage(a, b, opts);
     opts.log.done();
     expect(c).to.equal(a);
 }
 
 export function shouldBeSecond(a: any, b: any) {
-    let opts: KeeperOptions = {
+    let opts: SalvageOptions = {
         log: new ConsoleLogger(silent),
     }
-    let c = keep(a, b, opts);
+    let c = salvage(a, b, opts);
     opts.log.done();
     expect(c).to.equal(b);
 }
 
 export function shouldContain(a: Array<any>, b: Array<any>, fromA: Array<number | number[]>, fromB: Array<number>) {
-    let opts: KeeperOptions = {
+    let opts: SalvageOptions = {
         log: new ConsoleLogger(silent),
     }
-    let r = keep(a, b, opts);
+    let r = salvage(a, b, opts);
     expect(r).to.deep.equal(b);
 
     for (let i = 0; i < fromA.length; i++) {
@@ -54,7 +54,7 @@ export function shouldContain(a: Array<any>, b: Array<any>, fromA: Array<number 
 }
 
 export function shouldEqual(a: {}, b: {}, c: {}, fromA: string[], fromB: string[]) {
-    let opts: KeeperOptions = {
+    let opts: SalvageOptions = {
         log: new ConsoleLogger(silent),
     }
     let ta = _.clone(a);
@@ -63,7 +63,7 @@ export function shouldEqual(a: {}, b: {}, c: {}, fromA: string[], fromB: string[
     // This should be true (just confirm before we test again later)
     expect(ta).to.deep.equal(a);
     expect(tb).to.deep.equal(b);
-    let r = keep(a, b, opts);
+    let r = salvage(a, b, opts);
     opts.log.done();
 
     // Make sure that "a" and "b" didn't get mutated for some reason
