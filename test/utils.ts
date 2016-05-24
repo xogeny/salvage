@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { keep, ConsoleLogger, KeeperOptions } from '../src';
 import _ = require('lodash');
 
-const silent = false;
+const silent = true;
 
 export function shouldChange(a: any, b: any) {
     let opts: KeeperOptions = {
