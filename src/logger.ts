@@ -25,9 +25,10 @@ export class ConsoleLogger implements Logger {
         this.stack.push([a, b]);
     }
     fact(msg: string) {
-        if (!this.silent) console.log(this.prefix() + " => " + msg);
+        if (!this.silent) console.log(this.prefix() + "=> " + msg);
     }
     leave(c: any) {
+        this.depth--;
         if (this.stack.length > 0) {
             let context = this.stack.pop();
             if (!this.silent) {
@@ -44,7 +45,6 @@ export class ConsoleLogger implements Logger {
                 console.log(this.prefix()+"... result: ", c);
             }
         }
-        this.depth--;
         if (this.depth < 0) {
             throw new Error("Called log.leave too many time");
         }

@@ -1,7 +1,7 @@
-import { shouldBeSame, shouldEqual } from './utils';
+import { shouldBeFirst, shouldEqual } from './utils';
 
 xdescribe("Basic tests", () => {
     it("should not change for empty arrays", () => {
-        shouldBeSame({ a: [] }, { a: [] });
+        shouldBeFirst({ a: [] }, { a: [] });
     });
 })

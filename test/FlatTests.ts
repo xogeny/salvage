@@ -3,22 +3,22 @@ import mocha = require('mocha');
 
 import { ConsoleLogger } from '../src/logger';
 
-import { shouldEqual, shouldBeSame } from './utils';
+import { shouldEqual, shouldBeFirst } from './utils';
 
 describe("Flat tests", () => {
     it("should not change empty objects", () => {
-        shouldBeSame({}, {});
+        shouldBeFirst({}, {});
     });
     it("should not change identical properties", () => {
         let x = "foo";
-        shouldBeSame({
+        shouldBeFirst({
             x: x,
         }, {
             x: x,
         })
     });
     it("should not change equal properties", () => {
-        shouldBeSame({
+        shouldBeFirst({
             x: "foo",
         }, {
             x: "foo",
@@ -30,7 +30,7 @@ describe("Flat tests", () => {
         }, {}, {}, [], [])
     })
     it("should not change equal numbers", () => {
-        shouldBeSame({
+        shouldBeFirst({
             x: 5,
         }, {
             x: 5,
@@ -69,12 +69,12 @@ describe("Flat tests", () => {
         }, ["y"], ["z"]);
     })
     it("should handle booleans", () => {
-        shouldBeSame({
+        shouldBeFirst({
             x: true,
         }, {
             x: true,
         })
-        shouldBeSame({
+        shouldBeFirst({
             x: false,
         }, {
             x: false,

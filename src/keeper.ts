@@ -1,4 +1,9 @@
 import { Logger } from './logger';
+import _ = require('lodash');
+
+export interface KeeperOptions {
+    log: Logger;
+}
 
 /**
  * This function takes two arguments where the first argument 
@@ -20,7 +25,11 @@ import { Logger } from './logger';
  * changed.  By running such values through the 'keep' function,
  * we can determine which values truly need updating.
  */
-export function keep(aval: any, bval: any, log: Logger): any {
+export function keep(aval: any, bval: any, opts?: KeeperOptions) {
+    //export function keep(aval: any, bval: any, opts?: KeeperOptions): any {
+    let log = (opts ? opts.log : undefined);
+
+    //console.log("Root: log = ", log);
     if (log) log.enter(aval, bval);
     // Get the result of "typeof" for both values.
     let bto = typeof aval;
@@ -47,11 +56,11 @@ export function keep(aval: any, bval: any, log: Logger): any {
             // as "object" in Javascript (including a null value).
             case 'object':
                 // Handle null value special case...
-                if (aval===null || bval===null) {
+                if (aval === null || bval === null) {
                     if (log) log.leave(bval);
                     return bval;
                 }
-                
+
                 // If this is an object, let's convert it to string to help us try to figure out
                 // what kind of object it is...
                 let ctype = bval.toString();
@@ -60,14 +69,15 @@ export function keep(aval: any, bval: any, log: Logger): any {
                     case "[object Object]":
                         // It's an object, so use this special function to decide what
                         // properties to keep.
-                        let ret = keepObject(aval, bval, log);
+                        //console.log("K log = ", log);
+                        let ret = keepObject(aval, bval, opts);
                         if (log) log.leave(ret);
                         return ret;
                     default:
                         if (Array.isArray(bval)) {
                             // It's an array, so use this special function to decide
                             // what elements to keep.
-                            let ret = keepArray(aval, bval);
+                            let ret = keepArray(aval, bval, opts);
                             if (log) log.leave(ret);
                             return ret;
                         } else {
@@ -85,16 +95,23 @@ export function keep(aval: any, bval: any, log: Logger): any {
     return bval;
 }
 
-function keepObject(a: {}, b: {}, log: Logger): {} {
+type Where = "FromA" | "FromB" | "Deleted" | "New";
+
+function keepObject(a: {}, b: {}, opts: KeeperOptions): {} {
+    let log = (opts ? opts.log : undefined);
+
     if (log) log.enter(a, b);
     let ret: {} = {}
-    let changed = false;
+    let where: { [key: string]: Where } = {}
 
     // By default, we assume the result will have the same values for its
     // properties as a.
+    /*
     for (let aprop in a) {
         ret[aprop] = a[aprop];
+        where[aprop] = "FromA";
     }
+    */
 
     for (let aprop in a) {
         let aval = a[aprop];
@@ -102,13 +119,23 @@ function keepObject(a: {}, b: {}, log: Logger): {} {
         if (!b.hasOwnProperty(aprop)) {
             // If b is missing a prop that a has, then we need to
             // remove it from the result.
+            if (log) log.fact("Dropping " + aprop + " from result");
             delete ret[aprop];
-            changed = true;
+            where[aprop] = "Deleted";
         } else {
-            let tmp = keep(aval, bval, log);
-            if (tmp !== aval) {
+            let tmp = keep(aval, bval, opts);
+            if (tmp === aval) {
+                if (log) log.fact("Keeping 'a' value for property " + aprop);
+                ret[aprop] = aval;
+                where[aprop] = "FromA";
+            } else if (tmp === bval) {
+                if (log) log.fact("Keeping 'b' value for property " + aprop);
                 ret[aprop] = tmp;
-                changed = true;
+                where[aprop] = "FromB";
+            } else {
+                if (log) log.fact("New value for property " + aprop);
+                ret[aprop] = tmp;
+                where[aprop] = "New";
             }
         }
     }
@@ -116,20 +143,37 @@ function keepObject(a: {}, b: {}, log: Logger): {} {
     for (let bprop in b) {
         // Check if b has any properties that a didn't.
         if (!a.hasOwnProperty(bprop)) {
+            if (log) log.fact("Using 'b' value for property " + bprop);
             ret[bprop] = b[bprop];
-            changed = true;
+            where[bprop] = "FromB";
         }
     }
 
-    if (changed) {
-        log.leave(ret);
-        return ret;
+    if (_.every(where, (x) => x === "FromA")) {
+        if (log) {
+            log.fact("All values came from 'a' value");
+            log.leave(a);
+        }
+        return a;
     }
-    log.leave(a);
-    return a;
+    if (_.every(where, (x) => x === "FromB")) {
+        if (log) {
+            log.fact("All values came from 'b' value");
+            log.leave(b);
+        }
+        return b;
+    }
+
+    if (log) {
+        log.fact("New object required, where = "+JSON.stringify(where));
+        log.leave(ret);
+    }
+    return ret;
 }
 
-function keepArray(a: any[], b: any[]): any[] {
+function keepArray(a: any[], b: any[], opts: KeeperOptions): any[] {
+    let log = (opts ? opts.log : undefined);
+
     let ret: any[] = [];
     for (let i = 0; i < a.length; i++) {
 
