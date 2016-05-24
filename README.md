@@ -46,11 +46,15 @@ Then imagine that you query your server after a price drop for one item and get 
     }]
 }
 ```
+
 You wouldn't want to trigger unnecessary redraws.  So, an ideal situation would be to preserve the
 items in the `catalog` that didn't change.  By preserve, I mean that they are equal (as in `===`)
-to the previous values in the catalog.
+to the previous values in the catalog.  In the case of the example above, the value of `catalog` would
+change (since the array itself is "new"), but the only element that would have a different (`!==`)
+value would be the one for "Blood Rage".  All others would be `===` to their predecessor (even if
+elements of the array are inserted or removed).
 
-We can `salvage` the values as follows:
+The API consists of just a single function, `salvage`, which is invoked as follows:
 
 ```
 let newState = salvage(oldState, deserializedValue);
@@ -58,6 +62,17 @@ let newState = salvage(oldState, deserializedValue);
 
 The `salvage` function will preserve as many values from within arrays and objects as possible so
 as to minimize the number of new values present in the hierarchy of `newState`.
+
+## Why?
+
+Working with React and Angular2 UIs that depend heavily on `===` equality but, at the same time, working
+with data sources that generated data from "out of memory", I wanted to be able to preserve the ability
+to use `===` for efficiency.
+
+My guess is that something like this has been done before.  However, I couldn't find such a thing.  This
+is probably due to the fact that I'm not sure what Google search terms to use.  Perhaps this kind of
+thing has a widely accepted name and I simply don't know what it is.  By all means, if there are libraries
+out there that do this kind of thing...please let me know.
 
 ## Types
 
