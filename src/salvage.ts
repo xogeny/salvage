@@ -45,6 +45,7 @@ export function salvage(aval: any, bval: any, opts?: SalvageOptions) {
             case 'string':
             case 'number':
             case 'boolean':
+            case 'function':
                 if (aval === bval) {
                     if (log) log.leave(aval);
                     return aval;
@@ -62,8 +63,8 @@ export function salvage(aval: any, bval: any, opts?: SalvageOptions) {
 
                 // If this is an object, let's convert it to string to help us try to figure out
                 // what kind of object it is...
-                let ctype = bval.toString();
-
+                //let ctype = bval.toString();
+                let ctype = Object.prototype.toString.call(bval);
                 switch (ctype) {
                     case "[object Object]":
                         // It's an object, so use this special function to decide what
@@ -72,6 +73,15 @@ export function salvage(aval: any, bval: any, opts?: SalvageOptions) {
                         let ret = salvageObject(aval, bval, opts);
                         if (log) log.leave(ret);
                         return ret;
+                    case "[object Date]":
+                        // You might imagine that one could use === or at the very least
+                        // == here...but this is Javascript.
+                        if (aval >= bval && aval <= bval) {
+                            if (log) log.leave(aval);
+                            return aval;
+                        }
+                        if (log) log.leave(bval);
+                        return bval;
                     default:
                         /* istanbul ignore else */
                         if (Array.isArray(bval)) {

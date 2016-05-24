@@ -76,6 +76,12 @@ out there that do this kind of thing...please let me know.
 
 ## Types
 
-Currently, the library supports `number`, `string`, `null`, objects and arrays.  I need to add some test
-cases for `Date` to make sure that is handled correctly.  If it encounters a value that it doesn't know
-how to salvage, it will throw an exception.
+The main goal of this library is to allow in-memory values to be updated by values that originated
+outside of memory.  In practice, this means values that have been reconstituted via some deserialization
+process and, that, in practice means JSON.  As such, the focus here is on the JSON primitives: numbers,
+strings, `null`, booleans, objects and array.  As a practical matter, I included support for both `Date`
+and `function` types (even though those are outside the scope of the JSON spec).  Dates in particular could
+be pretty important and could easily be transformed as part of a deserialization process.
+
+This still leaves other types of values like `Buffer`, `Uint8Array`, *etc*. unhandled.  If `salvage` encounters
+a value that it doesn't know how to handle, it will throw an exception.
