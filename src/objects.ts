@@ -1,9 +1,14 @@
 import { KeeperOptions } from './options';
 import { keep } from './keeper';
-import _ = require('lodash');
 
 type Where = "FromA" | "FromB" | "Deleted" | "New";
 
+function every(obj: {}, pred: (elem: any) => boolean): boolean {
+    for(let key in obj) {
+        if (!pred(obj[key])) return false;
+    }
+    return true;
+}
 
 // TODO: This can be simplified, I think.  Just assume b unless we find a value in a
 // that is the same.
@@ -59,14 +64,14 @@ export function keepObject(a: {}, b: {}, opts: KeeperOptions): {} {
         }
     }
 
-    if (_.every(where, (x) => x === "FromA")) {
+    if (every(where, (x) => x === "FromA")) {
         if (log) {
             log.fact("All values came from 'a' value");
             log.leave(a);
         }
         return a;
     }
-    if (_.every(where, (x) => x === "FromB")) {
+    if (every(where, (x) => x === "FromB")) {
         if (log) {
             log.fact("All values came from 'b' value");
             log.leave(b);

@@ -2,7 +2,6 @@ import { KeeperOptions } from './options';
 import { keepObject } from './objects';
 import { keepArray } from './arrays';
 import { Logger } from './logger';
-import _ = require('lodash');
 
 /**
  * This function takes two arguments where the first argument 
