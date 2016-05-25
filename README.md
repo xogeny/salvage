@@ -129,7 +129,7 @@ check...
 
 | Operation               | Time (for equal object) | Time (for different objects) |
 | ----------------------- | ----------------------- | ---------------------------- |
-| Deep Equality Check | **13ms** |  |
+| Deep Equality Check (`_.isEqual`) | **13ms** |  |
 | `salvage` (default) | **22ms** | 18ms |
 | `salvage` (`jsonKey`) | 24ms | 15ms |
 | `salvage` (use `_id`) | 30ms | 13ms |
