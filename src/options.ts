@@ -37,6 +37,14 @@ export function sameIndex(a: any, i: number) {
 }
 
 /**
+ * This key function constructs a key by running JSON.stringify on the 
+ * underlying value.  This is a pretty brute force approach.
+ */
+export function jsonKey(a: any) {
+    return JSON.stringify(a);
+}
+
+/**
  * SalvageOptions is the type that defines what options can be passed
  * into the `salvage` function.  The `log` allows the user to provide
  * a Logger instance.  However, this option is primarily used by developers

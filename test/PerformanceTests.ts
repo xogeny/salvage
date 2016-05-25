@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import mocha = require('mocha');
 
 import { ConsoleLogger } from '../src/logger';
-import { salvage, SalvageOptions, sameIndex } from '../src';
+import { salvage, SalvageOptions, sameIndex, jsonKey } from '../src';
 import fs = require('fs');
 import _ = require('lodash');
 
@@ -21,6 +21,9 @@ describe("Performance tests", () => {
         let kf: SalvageOptions = {
             //log: new ConsoleLogger(false),
             keyFunction: (a: any, index: number) => a.hasOwnProerty("_id") ? a["_id"] : "any",
+        }
+        let jk: SalvageOptions = {
+            keyFunction: jsonKey,
         }
         
         // I deliberately read this three times to create objects with different
@@ -48,6 +51,17 @@ describe("Performance tests", () => {
         console.time("salvage (are diff)");
         let y = salvage(base, diff);
         console.timeEnd("salvage (are diff)");
+        expect(y).to.not.equal(base);
+        expect(y).to.not.equal(diff);
+        expect(y).to.deep.equal(diff);
+
+        console.time("salvage [jsonKey] (are equal)");
+        x = salvage(base, same, jk);
+        console.timeEnd("salvage [jsonKey] (are equal)");
+        expect(x).to.equal(base);
+        console.time("salvage [jsonKey] (are diff)");
+        y = salvage(base, diff, jk);
+        console.timeEnd("salvage [jsonKey] (are diff)");
         expect(y).to.not.equal(base);
         expect(y).to.not.equal(diff);
         expect(y).to.deep.equal(diff);
