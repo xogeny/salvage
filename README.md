@@ -128,6 +128,7 @@ demonstrates how invocations of `salvage` (with a few different options) compare
 check...
 
 | Operation | Time (for equal object) | Time (for different objects) |
+| -- | -- | -- |
 | Equality Check | 13ms | -- |
 | `salvage` (default) | 22ms | 18ms |
 | `salvage` (`jsonKey`) | 24ms | 15ms |
