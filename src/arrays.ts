@@ -1,4 +1,4 @@
-import { SalvageOptions } from './options';
+import { SalvageOptions, allIndices } from './options';
 import { salvage } from './salvage';
 
 function identical(a: any[], b: any[]): boolean {
@@ -13,25 +13,19 @@ function identical(a: any[], b: any[]): boolean {
 
 export function salvageArray(a: any[], b: any[], opts: SalvageOptions): any[] {
     let log = (opts ? opts.log : undefined);
+    let chooser = (opts && opts.indexChooser ? opts.indexChooser : allIndices);
 
     if (log) log.enter(a, b);
     let ret: any[] = [];
     for (let i = 0; i < b.length; i++) {
         let bval = b[i];
         ret[i] = bval;
-        if (opts && opts.sameIndex) {
-            let aval = a[i];
+        let indices = chooser(i, a, bval);
+        for (let j = 0; j < indices.length; j++) {
+            let aval = a[indices[j]];
             let c = salvage(aval, bval, opts);
             if (c === aval) {
                 ret[i] = aval;
-            }
-        } else {
-            for (let j = 0; j < a.length; j++) {
-                let aval = a[j];
-                let c = salvage(aval, bval, opts);
-                if (c === aval) {
-                    ret[i] = aval;
-                }
             }
         }
     }

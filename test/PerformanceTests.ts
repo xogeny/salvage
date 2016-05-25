@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import mocha = require('mocha');
 
 import { ConsoleLogger } from '../src/logger';
-import { salvage, SalvageOptions } from '../src';
+import { salvage, SalvageOptions, sameIndex } from '../src';
 import fs = require('fs');
 import _ = require('lodash');
 
@@ -11,7 +11,7 @@ import { shouldEqual, shouldBeFirst } from './utils';
 describe("Performance tests", () => {
     it("should compare favorably to _.isEqual", () => {
         let opts: SalvageOptions = {
-            sameIndex: true,
+            indexChooser: sameIndex,
         }
         let base = JSON.parse(fs.readFileSync("samples/sample1.json").toString());
         let same = JSON.parse(fs.readFileSync("samples/sample1.json").toString());
