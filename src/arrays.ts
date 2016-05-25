@@ -1,4 +1,4 @@
-import { SalvageOptions, sameKey } from './options';
+import { SalvageOptions, defaultKey } from './options';
 import { _salvage } from './salvage';
 
 /*
@@ -35,7 +35,7 @@ export function salvageArray(a: any[], b: any[], opts: SalvageOptions, aparent: 
     
     // See if the user provided a key function, if not...use "sameKey" which will basically mean
     // that we compare every element in "a" with every element in "b"...
-    let keyfunc = (opts && opts.keyFunction ? opts.keyFunction : sameKey);
+    let keyfunc = (opts && opts.keyFunction ? opts.keyFunction : defaultKey);
 
     // Determine the key for every element in "a" and match that key to the elements
     // that yielded that key...

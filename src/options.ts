@@ -13,11 +13,31 @@ import { Logger } from './logger';
 export type KeyFunction = (a: any, i: number, parent: any) => string;
 
 /**
+ * This is the default key function used if no user provided
+ * function is specified.
+ */
+export function defaultKey(a: any, i: number) {
+    let ato = typeof a;
+    switch (ato) {
+        case 'string':
+        case 'number':
+        case 'boolean':
+            return "" + a;
+        case 'object':
+            let ctype = Object.prototype.toString.call(a);
+            switch (ctype) {
+                case "[object Date]":
+                    return ""+a.getTime();
+            }
+    }
+    return JSON.stringify(a);
+}
+
+/**
  * This function is a key function that always returns the same value 
  * regardless of the element.  The practical consequence is that using 
  * this key function provides the most conservative checking (i.e., the
  * case where every element is compared against every other element).
- * This function is the default if no user defined key function is provided.
  * It is ALSO the slowest possible choice, so users are encouraged to provide
  * their own key functions in the case where more reasonable key values
  * can be determined.
@@ -33,7 +53,7 @@ export function sameKey(a: any, i: number) {
  * between successive values.
  */
 export function sameIndex(a: any, i: number) {
-    return ""+i;
+    return "" + i;
 }
 
 /**
