@@ -63,6 +63,12 @@ let newState = salvage(oldState, deserializedValue);
 The `salvage` function will preserve as many values from within arrays and objects as possible so
 as to minimize the number of new values present in the hierarchy of `newState`.
 
+## Options
+
+When calling `salvage`, you can include an options object that provides hints about how `salvage` should
+function.  The main options are related to how array comparisions are done (see discussion below about
+Performance).
+
 ## Why?
 
 Working with React and Angular2 UIs that depend heavily on `===` equality but, at the same time, working
@@ -73,6 +79,48 @@ My guess is that something like this has been done before.  However, I couldn't 
 is probably due to the fact that I'm not sure what Google search terms to use.  Perhaps this kind of
 thing has a widely accepted name and I simply don't know what it is.  By all means, if there are libraries
 out there that do this kind of thing...please let me know.
+
+## Performance
+
+### Introduction
+
+In order to talk about performance, we need to consider what to compare the performance of this library
+to.  The way I look at this, I'm trying to allow frameworks to use object identity as a fast equality
+check.  This library is paying an "upfront" cost to allow that by processing successive values to
+preserve object identity to the extent possible.  So the point is that running `salvage` can be seen
+as an investment to make other operations faster later.
+
+That being said, I see the purpose of `salvage` as a way to perform deep equality checks in other parts
+of the code.  The worst case scenario for a deep equality check is comparing an object to another object
+that is (deeply) equal because it is, therefore, forced to check the entire hierarchy.  So that provides
+a kind of "base line" reference time for traversal of the object hierarchy as a reference point.
+
+So then the question becomes, how does `salvage` compare (in CPU time) to this reference point?  I've added
+a performance test to the library test suite.  I'm not sure that it can be considered representative
+of anything, but it is at least a non-trivial JSON representation.
+
+### Arrays
+
+The primary issue with performance
+at this point is in array handling.  This is because handling of object properties is relatively straight
+forward (you compare against the value associated with the same property in the previous object).  But
+array handling is different.  That is because changes in arrays might cause values to be inserted or deleted.
+This means that two values that are equal may shift around in the array (*i.e.,* have different indices).
+
+So how do we check to see if we can preserve object/value identity from one array value to the next?
+The safest and most general approach is to compare each element in the new array value to all values
+in the previous array value.  For two "large" arrays, this can be computationally intensive and my
+benchmarks to date indicate that this is, in fact, the biggest performance issue.  Another approach is
+to only check the elements with matching indices between the two arrays.  This provides a tremendous
+speed up, but at the cost of not being able to handle "shifting" of elements within an array.  The
+final way of handling this is to provide a "key function" which can generate a string value "key"
+for each element in the arrays.  In this way, we only compare elements with matching keys.  We treat
+this key effectively as a hash function (although I've used the term "key" to be consistent with
+React's handling of arrays of DOM elements).
+
+### Results
+
+TODO
 
 ## Types
 
