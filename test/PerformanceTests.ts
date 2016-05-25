@@ -15,9 +15,11 @@ describe("Performance tests", () => {
         this.timeout(1000000);
         
         let si: SalvageOptions = {
+            //log: new ConsoleLogger(false),
             keyFunction: sameIndex,
         }
         let kf: SalvageOptions = {
+            //log: new ConsoleLogger(false),
             keyFunction: (a: any, index: number) => a.hasOwnProerty("_id") ? a["_id"] : "any",
         }
         

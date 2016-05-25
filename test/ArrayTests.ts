@@ -1,5 +1,8 @@
 import { shouldBeFirst, shouldBeSecond, shouldEqual, shouldContain } from './utils';
 
+import { expect } from 'chai';
+import { salvage, ConsoleLogger } from '../src';
+
 describe("Basic tests", () => {
     it("should not change for empty arrays", () => {
         shouldBeFirst([], []);
@@ -34,5 +37,16 @@ describe("Basic tests", () => {
         shouldContain([{ a: 1 }, { a: 2 }, { a: 3 }],
             [{ a: 2 }, { a: 3 }, { a: 1 }],
             [[0, 1], [1, 2], [2, 0]], []);
+    })
+    it("should use keys if provided", () => {
+        let x = [{ a: 1 }, { a: 2 }, { a: 3 }];
+        let y = [{ a: 2 }, { a: 3 }, { a: 1 }];
+        let c = salvage(x, y, {
+            //log: new ConsoleLogger(true),
+            keyFunction: (x) => x["a"],
+        });
+        expect(c[0]).to.equal(x[1]);
+        expect(c[1]).to.equal(x[2]);
+        expect(c[2]).to.equal(x[0]);
     })
 })

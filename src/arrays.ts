@@ -11,7 +11,7 @@ function identical(a: any[], b: any[]): boolean {
     return true;
 }
 
-export function salvageArray(a: any[], b: any[], aparent: any, bparent: any, opts: SalvageOptions): any[] {
+export function salvageArray(a: any[], b: any[], opts: SalvageOptions, aparent: any, bparent: any): any[] {
     let log = (opts ? opts.log : undefined);
     let keyfunc = (opts && opts.keyFunction ? opts.keyFunction : sameKey);
 
@@ -34,9 +34,11 @@ export function salvageArray(a: any[], b: any[], aparent: any, bparent: any, opt
         ret[i] = bval;
         
         let bkey = keyfunc(bval, i, bparent);
+        if (log) log.fact("Key for element "+i+" of 'b' was "+bkey);
         let indices: number[] = [];
         if (akeys.hasOwnProperty(bkey)) {
             indices = akeys[bkey];
+            if (log) log.fact("Indices for elements of 'a' matching key '"+bkey+"' = "+JSON.stringify(indices));
         }
         
         for (let j = 0; j < indices.length; j++) {
@@ -44,6 +46,7 @@ export function salvageArray(a: any[], b: any[], aparent: any, bparent: any, opt
             let c = _salvage(aval, bval, opts, a, b);
             if (c === aval) {
                 ret[i] = aval;
+                break;
             }
         }
     }
