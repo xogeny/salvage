@@ -13,27 +13,6 @@ import { Logger } from './logger';
 export type KeyFunction = (a: any, i: number, parent: any) => string;
 
 /**
- * This is the default key function used if no user provided
- * function is specified.
- */
-export function defaultKey(a: any, i: number) {
-    let ato = typeof a;
-    switch (ato) {
-        case 'string':
-        case 'number':
-        case 'boolean':
-            return "" + a;
-        case 'object':
-            let ctype = Object.prototype.toString.call(a);
-            switch (ctype) {
-                case "[object Date]":
-                    return ""+a.getTime();
-            }
-    }
-    return JSON.stringify(a);
-}
-
-/**
  * This function is a key function that always returns the same value 
  * regardless of the element.  The practical consequence is that using 
  * this key function provides the most conservative checking (i.e., the
@@ -70,9 +49,12 @@ export function jsonKey(a: any) {
  * a Logger instance.  However, this option is primarily used by developers
  * to facilitate debugging and can largely be ignored.  The `keyFunction`
  * argument allows a user specified key function to be provided for 
- * helping to narrow down potential duplicate values in arrays.
+ * helping to narrow down potential duplicate values in arrays.  The
+ * 'keyIds' is a list of ids that can be used to provide keys of objects.
+ * The first key present in an object will be used, so order matters.
  */
 export interface SalvageOptions {
     log?: Logger;
     keyFunction?: KeyFunction;
+    keyIds?: string[];
 }

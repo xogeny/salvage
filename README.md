@@ -127,7 +127,13 @@ using `lodash` to perform a deep equality check on my one sample data set.  The 
 demonstrates how invocations of `salvage` (with a few different options) compared to this deep equality
 check...
 
-TODO
+Operation | Time (for equal object) | Time (for different objects)
+Equality Check | 13ms | --
+`salvage` (default) | 22ms | 18ms
+`salvage` (`jsonKey`) | 24ms | 15ms
+`salvage` (`sameIndex`) | 14ms | 16ms
+`salvage` (use `_id`) | 30ms | 13ms
+`salvage` (`sameKey`) | 490ms | 492ms
 
 ## Types
 
