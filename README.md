@@ -1,5 +1,7 @@
 # Salvage
 
+![Build Status](https://travis-ci.org/xogeny/salvage.svg?branch=master)
+
 This library to handle the use case where you have React components (or any system where you want to use
 the `===` operator to determine equality) but your data is coming from non-in-memory source.  The use case
 I'm most concerned with is when data is being deserialized from a web sockets of HTTP responses.  Such data
