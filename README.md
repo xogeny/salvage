@@ -67,7 +67,9 @@ as to minimize the number of new values present in the hierarchy of `newState`.
 
 When calling `salvage`, you can include an options object that provides hints about how `salvage` should
 function.  The main options are related to how array comparisions are done (see discussion below about
-Performance).
+Performance).  However, at the moment the default behavior seems to be nearly as good as any of the
+optimized settings I've tried.  As such, I suggest using the default settings until I see any cases
+"in the wild" where tweaking these settings makes a big improvement.
 
 ## Why?
 
