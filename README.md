@@ -127,17 +127,18 @@ using `lodash` to perform a deep equality check on my one sample data set.  The 
 demonstrates how invocations of `salvage` (with a few different options) compared to this deep equality
 check...
 
-| Operation | Time (for equal object) | Time (for different objects) |
-| -- | -- | -- |
-| Equality Check | 13ms | -- |
-| `salvage` (default) | 22ms | 18ms |
+| Operation               | Time (for equal object) | Time (for different objects) |
+| ----------------------- | ----------------------- | ---------------------------- |
+| Equality Check | **13ms** |  |
+| `salvage` (default) | **22ms** | 18ms |
 | `salvage` (`jsonKey`) | 24ms | 15ms |
-| `salvage` (`sameIndex`) | 14ms | 16ms |
 | `salvage` (use `_id`) | 30ms | 13ms |
 | `salvage` (`sameKey`) | 490ms | 492ms |
 
 The main thing to focus on in this chart is the fact that running `salvage` in this case took no more
-than 70% longer than testing for object equality using the `default` key function.
+than 70% longer than testing for object equality using the `default` key function.  You can also see
+that a couple of ther key functions were used and the default key function is quite performant vs.
+more case specific key functions.
 
 You might think...oh, deep object equality checks are faster.  So what do I need `salvage` for?
 
@@ -151,7 +152,8 @@ of DOM components that cascade some top level value down through the DOM hierarc
 values to these components along the way.  These components are going to decide whether they need
 to redraw based on the *identity* of their values and whether that identity has changed.  What `salvage`
 is helping you with here is preserving the identities whenever possible.  As such, **it is potentially
-eliminating the need for multiple, nested deep equality checks**.
+eliminating the need for multiple, nested deep equality checks and the associated work of rerendering
+those components**.
 
 ## Types
 
