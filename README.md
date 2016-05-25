@@ -135,10 +135,10 @@ check...
 | `salvage` (use `_id`) | 30ms | 13ms |
 | `salvage` (`sameKey`) | 490ms | 492ms |
 
-The main thing to focus on in this chart is the fact that running `salvage` in this case took no more
-than 70% longer than testing for object equality using the `default` key function.  You can also see
-that a couple of ther key functions were used and the default key function is quite performant vs.
-more case specific key functions.
+The main thing to focus on in this chart is the fact that running `salvage` with its default
+options took no more than 70% longer than testing for object equality using the `default` key
+function.  You can also see that a couple of other key functions were used and the default key
+function is quite performant vs. more case specific key functions.
 
 You might think...oh, deep object equality checks are faster.  So what do I need `salvage` for?
 
