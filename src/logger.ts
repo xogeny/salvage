@@ -1,3 +1,7 @@
+/**
+ * The Logger interface is really only used for debugging.  It allows the library
+ * to document the various choices it makes in trying to salvage values.
+ */
 export interface Logger {
     enter(a: any, b: any): void;
     fact(msg: string): void;
@@ -5,6 +9,10 @@ export interface Logger {
     done(): void;
 }
 
+/**
+ * ConsoleLogger is the implementation of the Logger interface that generates
+ * output to the console.
+ */
 export class ConsoleLogger implements Logger {
     depth: number;
     stack: Array<[any, any]> = [];
