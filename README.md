@@ -166,3 +166,12 @@ be pretty important and could easily be transformed as part of a deserialization
 
 This still leaves other types of values like `Buffer`, `Uint8Array`, *etc*. unhandled.  If `salvage` encounters
 a value that it doesn't know how to handle, it will throw an exception.
+
+## To Do
+
+I've tried to create a representative set of test cases and I have 100% coverage for the test cases
+I have.  But I'd really like to have more test cases to make sure the code is robust to as many
+weird corner cases as I can find.
+
+Another potential future enhancement would be to be able to use `salvage` in the context of `Observables`
+to preserve identity for `next` values in a stream.
