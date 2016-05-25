@@ -24,6 +24,14 @@ import { Logger } from './logger';
  * we can determine which values truly need updating.
  */
 export function salvage(aval: any, bval: any, opts?: SalvageOptions) {
+    return _salvage(aval, bval, opts, undefined, undefined);
+}
+
+/**
+ * This is an "internal" implementation of salvage that has a slightly
+ * broader interface to handle recursive calls.
+ */
+export function _salvage(aval: any, bval: any, opts: SalvageOptions, aparent: any, bparent: any) {
     //export function keep(aval: any, bval: any, opts?: KeeperOptions): any {
     let log = (opts ? opts.log : undefined);
 
@@ -87,7 +95,7 @@ export function salvage(aval: any, bval: any, opts?: SalvageOptions) {
                         if (Array.isArray(bval)) {
                             // It's an array, so use this special function to decide
                             // what elements to keep.
-                            let ret = salvageArray(aval, bval, opts);
+                            let ret = salvageArray(aval, bval, opts, aparent, bparent);
                             if (log) log.leave(ret);
                             return ret;
                         } else {

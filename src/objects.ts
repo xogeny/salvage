@@ -1,5 +1,5 @@
 import { SalvageOptions } from './options';
-import { salvage } from './salvage';
+import { _salvage } from './salvage';
 
 // A simple function that checks whether two objects have
 // *exactly* the same keys.
@@ -30,7 +30,7 @@ export function salvageObject(a: {}, b: {}, opts: SalvageOptions): {} {
         // value (from a or from b) to keep
         if (a.hasOwnProperty(key)) {
             let aval = a[key];
-            let cval = salvage(aval, bval, opts); // which to use?
+            let cval = _salvage(aval, bval, opts, a, b); // which to use?
             ret[key] = cval;
 
             if (cval === aval) {
