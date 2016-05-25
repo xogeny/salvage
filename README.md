@@ -120,12 +120,13 @@ in React or the `trackBy` function can be used in Angular 2 to accomplish simila
 
 ### Results
 
-I have only one large data set in my test cases.  Again, I cannot say this is representative.  But 
-I think it is probably reasonable.  As I mentioned before, I feel that performance of the `salvage`
-function should be compared relative to a deep equality check.  I established this baseline by 
-using `lodash` to perform a deep equality check on my one sample data set.  The follow chart
-demonstrates how invocations of `salvage` (with a few different options) compared to this deep equality
-check...
+I have only [one large data set](https://github.com/xogeny/salvage/blob/master/samples/sample1.json)
+in my test cases.  Again, I cannot say this is representative.  But I think it is probably reasonable.
+As I mentioned before, I feel that performance of the `salvage` function should be compared relative
+to a deep equality check.  I established this baseline by using `lodash` to perform a deep equality check
+on my [one sample data set](https://github.com/xogeny/salvage/blob/master/samples/sample1.json).  The
+follow chart demonstrates how invocations of `salvage` (with a few different options) compared to this
+deep equality check...
 
 | Operation               | Time (for equal object) | Time (for different objects) |
 | ----------------------- | ----------------------- | ---------------------------- |
