@@ -112,13 +112,11 @@ This means that two values that are equal may shift around in the array (*i.e.,*
 So how do we check to see if we can preserve object/value identity from one array value to the next?
 The safest and most general approach is to compare each element in the new array value to all values
 in the previous array value.  For two "large" arrays, this can be computationally intensive and my
-benchmarks to date indicate that this is, in fact, the biggest performance issue.  Another approach is
-to only check the elements with matching indices between the two arrays.  This provides a tremendous
-speed up, but at the cost of not being able to handle "shifting" of elements within an array.  The
-final way of handling this is to provide a "key function" which can generate a string value "key"
-for each element in the arrays.  In this way, we only compare elements with matching keys.  We treat
-this key effectively as a hash function (although I've used the term "key" to be consistent with
-React's handling of arrays of DOM elements).
+benchmarks to date indicate that you definitely don't want to do that.  For this reason, I've
+settled on an approach that uses a "key function" to generate a string "key" value (conceptually
+you can think of this as a has value) for each element in the arrays.  In this way, we only bother
+comparing elements with matching keys.  This follows very closely how a `key` attribute can be used
+in React or the `trackBy` function can be used in Angular 2 to accomplish similar things.
 
 ### Results
 
