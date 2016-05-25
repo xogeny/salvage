@@ -136,6 +136,23 @@ check...
 | `salvage` (use `_id`) | 30ms | 13ms |
 | `salvage` (`sameKey`) | 490ms | 492ms |
 
+The main thing to focus on in this chart is the fact that running `salvage` in this case took no more
+than 70% longer than testing for object equality using the `default` key function.
+
+You might think...oh, deep object equality checks are faster.  So what do I need `salvage` for?
+
+Yes, a simple deep equality check is going to be faster.  But this only tells you whether two values
+are the same at the root level.  On the other hand, by running `salvage`, you'll find out **all**
+(nested) values that are deep equal.
+
+To understand why this is important, consider a typical React hierarchy of components (and the same
+can also be applied in the case of Angular 2 as well).  It is quite common to have a rich hierarchy
+of DOM components that cascade some top level value down through the DOM hierarchy delegating nested
+values to these components along the way.  These components are going to decide whether they need
+to redraw based on the *identity* of their values and whether that identity has changed.  What `salvage`
+is helping you with here is preserving the identities whenever possible.  As such, **it is potentially
+eliminating the need for multiple, nested deep equality checks**.
+
 ## Types
 
 The main goal of this library is to allow in-memory values to be updated by values that originated
