@@ -1,6 +1,6 @@
 {
   "name": "salvage",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A library for updating only those values that have changed in a Javascript value",
   "main": "lib/src/index.js",
   "directories": {
