@@ -13,6 +13,24 @@ This library attempts to efficiently salvage as much as possible of the "current
 than completely replacing it with a newly known value.  I could imagine this library could also be useful
 as an operator for an `Observable` in order to salvage parts of previously reported values.
 
+## Getting started
+
+```
+npm install salvage
+```
+
+In TypesScript, you can import the function with:
+
+```
+import { salvage} from 'salvage';
+```
+
+From `node`, the simplest thing is probably do do:
+
+```
+var salvage = require('salvage').salvage;
+```
+
 ## Examples
 
 Consider that your current application state is represented by something like this:
